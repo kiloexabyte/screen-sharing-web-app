@@ -1,5 +1,5 @@
 // vitest.config.ts
-import { defineVitestConfig } from "@nuxt/test-utils/config"
+import { defineVitestConfig } from "@nuxt/test-utils/config";
 
 export default defineVitestConfig({
 	test: {
@@ -19,4 +19,4 @@ export default defineVitestConfig({
 		//   }
 		// }
 	}
-})
+});

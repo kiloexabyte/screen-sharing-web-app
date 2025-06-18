@@ -1,15 +1,15 @@
 <script setup lang="ts">
 // page data
-const localVideo = ref<HTMLMediaElement | null>(null)
-const { chatMessages } = useChatMessage()
-const currentRoom = ref<string>("")
-const currentHost = ref<string>("")
-const serverSideStreamingEnabled = ref<boolean>(false) // only relevant for host user
+const localVideo = ref<HTMLMediaElement | null>(null);
+const { chatMessages } = useChatMessage();
+const currentRoom = ref<string>("");
+const currentHost = ref<string>("");
+const serverSideStreamingEnabled = ref<boolean>(false); // only relevant for host user
 
 // UI state
-const chatIsOpen = ref(true)
-const dialogVisible = useState<boolean>("diaglogVisible", () => false)
-const failureMessage = useState<string>("failureMessage", () => "")
+const chatIsOpen = ref(true);
+const dialogVisible = useState<boolean>("diaglogVisible", () => false);
+const failureMessage = useState<string>("failureMessage", () => "");
 
 const {
 	hostRoom,
@@ -21,139 +21,139 @@ const {
 	cleanUpData,
 	participantNames,
 	isServerSideStreaming
-} = useLiveKit()
+} = useLiveKit();
 
-const route = useRoute()
-const router = useRouter()
+const route = useRoute();
+const router = useRouter();
 
 // URL param
 const { username, room, isHost, serverSideStreaming } =
-	route.query as Partial<UrlParam>
+	route.query as Partial<UrlParam>;
 
 const leave = async () => {
-	await leaveRoom()
-	router.push("/")
-}
+	await leaveRoom();
+	router.push("/");
+};
 
 const adjustVolume = (event: KeyboardEvent) => {
-	if (!localVideo.value) return
+	if (!localVideo.value) return;
 
-	const volumeChangeAmount = 0.1
+	const volumeChangeAmount = 0.1;
 	switch (event.key) {
 		case "ArrowUp":
 			localVideo.value.volume = Math.min(
 				localVideo.value.volume + volumeChangeAmount,
 				1
-			)
-			break
+			);
+			break;
 		case "ArrowDown":
 			localVideo.value.volume = Math.max(
 				localVideo.value.volume - volumeChangeAmount,
 				0
-			)
-			break
+			);
+			break;
 	}
-}
+};
 
 const toggleFullScreen = (): void => {
-	if (!localVideo.value) return
+	if (!localVideo.value) return;
 
 	if (!document.fullscreenElement) {
 		if (localVideo.value.requestFullscreen) {
-			localVideo.value.requestFullscreen()
+			localVideo.value.requestFullscreen();
 		} else if ((localVideo.value as any).mozRequestFullScreen) {
 			/* Firefox */
-			;(localVideo.value as any).mozRequestFullScreen()
+			(localVideo.value as any).mozRequestFullScreen();
 		} else if ((localVideo.value as any).webkitRequestFullscreen) {
 			/* Chrome, Safari & Opera */
-			;(localVideo.value as any).webkitRequestFullscreen()
+			(localVideo.value as any).webkitRequestFullscreen();
 		} else if ((localVideo.value as any).msRequestFullscreen) {
 			/* IE/Edge */
-			;(localVideo.value as any).msRequestFullscreen()
+			(localVideo.value as any).msRequestFullscreen();
 		}
 	} else {
 		if (document.exitFullscreen) {
-			document.exitFullscreen()
+			document.exitFullscreen();
 		} else if ((document as any).mozCancelFullScreen) {
 			/* Firefox */
-			;(document as any).mozCancelFullScreen()
+			(document as any).mozCancelFullScreen();
 		} else if ((document as any).webkitExitFullscreen) {
 			/* Chrome, Safari and Opera */
-			;(document as any).webkitExitFullscreen()
+			(document as any).webkitExitFullscreen();
 		} else if ((document as any).msExitFullscreen) {
 			/* IE/Edge */
-			;(document as any).msExitFullscreen()
+			(document as any).msExitFullscreen();
 		}
 	}
-}
+};
 
 const preventPlayPause = (event: MouseEvent): void => {
-	event.preventDefault()
-	toggleFullScreen()
-}
+	event.preventDefault();
+	toggleFullScreen();
+};
 
 const handleToggleStream = async () => {
 	if (localVideo.value) {
 		if (serverSideStreamingEnabled.value) {
-			await toggleScreenshare(localVideo.value)
+			await toggleScreenshare(localVideo.value);
 		} else {
-			await toggleScreenshareP2P(localVideo.value)
+			await toggleScreenshareP2P(localVideo.value);
 		}
 	}
-}
+};
 
 const handleToggleChat = async () => {
-	chatIsOpen.value = !chatIsOpen.value
-}
+	chatIsOpen.value = !chatIsOpen.value;
+};
 
 const handleCloseDialog = async () => {
-	failureMessage.value = ""
-	dialogVisible.value = false
-	router.push("/")
-}
+	failureMessage.value = "";
+	dialogVisible.value = false;
+	router.push("/");
+};
 
 onMounted(async () => {
 	if (!username || !room) {
-		router.push("/")
-		return
+		router.push("/");
+		return;
 	}
-	serverSideStreamingEnabled.value = serverSideStreaming === "true"
-	isServerSideStreaming.value = serverSideStreaming === "true"
+	serverSideStreamingEnabled.value = serverSideStreaming === "true";
+	isServerSideStreaming.value = serverSideStreaming === "true";
 	// check if room already exist
 	const res = await fetch(`/api/livekit/roomCheck?roomName=${room}`, {
 		method: "GET"
-	})
+	});
 
 	if (!res.ok) {
-		dialogVisible.value = true
-		failureMessage.value = "Error Checking if room already exist"
-		return
+		dialogVisible.value = true;
+		failureMessage.value = "Error Checking if room already exist";
+		return;
 	}
 
-	const data = await res.json()
+	const data = await res.json();
 
 	try {
 		if (isHost === "true") {
 			// hosting room
 			if (data.roomExist) {
-				dialogVisible.value = true
-				failureMessage.value = "Room already exist"
-				return
+				dialogVisible.value = true;
+				failureMessage.value = "Room already exist";
+				return;
 			}
 			await hostRoom(
 				room.toString() ?? "",
 				username.toString() ?? "",
 				serverSideStreamingEnabled.value,
 				localVideo.value
-			)
-			currentHost.value = username
-			currentRoom.value = room
+			);
+			currentHost.value = username;
+			currentRoom.value = room;
 		} else {
 			// joining existing room
 			if (!data.roomExist) {
-				dialogVisible.value = true
-				failureMessage.value = "Room does not exist"
-				return
+				dialogVisible.value = true;
+				failureMessage.value = "Room does not exist";
+				return;
 			}
 
 			if (localVideo.value) {
@@ -161,37 +161,37 @@ onMounted(async () => {
 					room.toString() ?? "",
 					username.toString() ?? "",
 					localVideo.value
-				)
-				currentHost.value = host
-				currentRoom.value = room
+				);
+				currentHost.value = host;
+				currentRoom.value = room;
 			}
 		}
 	} catch (err: any) {
-		dialogVisible.value = true
-		failureMessage.value = err.toString()
+		dialogVisible.value = true;
+		failureMessage.value = err.toString();
 	}
 
-	window.addEventListener("keydown", adjustVolume)
+	window.addEventListener("keydown", adjustVolume);
 
 	if (localVideo.value) {
 		// Add click event listener to prevent play/pause
-		localVideo.value.addEventListener("click", preventPlayPause)
+		localVideo.value.addEventListener("click", preventPlayPause);
 	}
-})
+});
 
 onBeforeUnmount(async () => {
-	await cleanUpData()
-	window.removeEventListener("keydown", adjustVolume)
+	await cleanUpData();
+	window.removeEventListener("keydown", adjustVolume);
 	if (localVideo.value) {
 		// Remove the click event listener
-		localVideo.value.removeEventListener("click", preventPlayPause)
+		localVideo.value.removeEventListener("click", preventPlayPause);
 	}
-})
+});
 
-provide("sendMessage", sendMessageLiveKit)
-provide("handleToggleStream", handleToggleStream)
-provide("ToggleChat", handleToggleChat)
-provide("leaveRoom", leave)
+provide("sendMessage", sendMessageLiveKit);
+provide("handleToggleStream", handleToggleStream);
+provide("ToggleChat", handleToggleChat);
+provide("leaveRoom", leave);
 </script>
 
 <template>
@@ -229,7 +229,7 @@ provide("leaveRoom", leave)
 		:visible="dialogVisible"
 		@hide="
 			() => {
-				dialogVisible = false
+				dialogVisible = false;
 			}
 		"
 	>

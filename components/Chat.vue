@@ -1,20 +1,20 @@
 <script setup lang="ts">
-import { watch, nextTick } from "vue"
+import { watch, nextTick } from "vue";
 
-const messagesContainer = ref<HTMLElement | null>(null)
+const messagesContainer = ref<HTMLElement | null>(null);
 const scrollToBottom = () => {
 	nextTick(() => {
 		if (messagesContainer.value) {
-			messagesContainer.value.scrollTop = messagesContainer.value.scrollHeight
+			messagesContainer.value.scrollTop = messagesContainer.value.scrollHeight;
 		}
-	})
-}
+	});
+};
 
 const props = defineProps<{
-	chats: ChatMessage[]
-}>()
+	chats: ChatMessage[];
+}>();
 
-watch(() => props.chats, scrollToBottom, { deep: true })
+watch(() => props.chats, scrollToBottom, { deep: true });
 </script>
 
 <template>

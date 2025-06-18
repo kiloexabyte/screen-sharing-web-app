@@ -6,12 +6,12 @@ export default defineEventHandler(async () => {
 		hour: "numeric",
 		minute: "numeric",
 		second: "numeric"
-	}
+	};
 
 	const formattedDate = new Intl.DateTimeFormat("en-US", options).format(
 		Date.now()
-	)
+	);
 	return {
 		result: `Website is up and running! ${formattedDate}`
-	}
-})
+	};
+});

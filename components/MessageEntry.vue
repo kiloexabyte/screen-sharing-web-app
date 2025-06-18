@@ -1,25 +1,25 @@
 <script setup lang="ts">
-import { ref, inject } from "vue"
-import Textarea from "primevue/textarea"
+import { ref, inject } from "vue";
+import Textarea from "primevue/textarea";
 
-type SendMessageFunction = (message: string) => void
+type SendMessageFunction = (message: string) => void;
 
-const sendMessage = inject<SendMessageFunction>("sendMessage")
-const message = ref("")
+const sendMessage = inject<SendMessageFunction>("sendMessage");
+const message = ref("");
 
 const send = () => {
 	if (sendMessage && message.value.trim()) {
-		sendMessage(message.value)
-		message.value = ""
+		sendMessage(message.value);
+		message.value = "";
 	}
-}
+};
 
 const sendOnEnter = (event: KeyboardEvent) => {
 	if (event.key === "Enter" && !event.shiftKey) {
-		event.preventDefault()
-		send()
+		event.preventDefault();
+		send();
 	}
-}
+};
 </script>
 
 <template>

@@ -1,26 +1,26 @@
 <script setup lang="ts">
-import { inject } from "vue"
+import { inject } from "vue";
 
 defineProps<{
-	roomName: string
-	usernames: string[]
-	username: string
-	host: string
-	isHost: string
-	usingSFU: boolean
-}>()
+	roomName: string;
+	usernames: string[];
+	username: string;
+	host: string;
+	isHost: string;
+	usingSFU: boolean;
+}>();
 
-type ToggleStreamFunction = () => void
-type LeaveRoomFunction = () => void
-type ToggleChatFunction = () => void
+type ToggleStreamFunction = () => void;
+type LeaveRoomFunction = () => void;
+type ToggleChatFunction = () => void;
 
-let toggleStream: ToggleStreamFunction | undefined
-let leaveRoom: LeaveRoomFunction | undefined
-let toggleChat: ToggleChatFunction | undefined
+let toggleStream: ToggleStreamFunction | undefined;
+let leaveRoom: LeaveRoomFunction | undefined;
+let toggleChat: ToggleChatFunction | undefined;
 
-leaveRoom = inject<LeaveRoomFunction>("leaveRoom")
-toggleChat = inject<ToggleChatFunction>("ToggleChat")
-toggleStream = inject<ToggleStreamFunction>("handleToggleStream")
+leaveRoom = inject<LeaveRoomFunction>("leaveRoom");
+toggleChat = inject<ToggleChatFunction>("ToggleChat");
+toggleStream = inject<ToggleStreamFunction>("handleToggleStream");
 </script>
 
 <template>

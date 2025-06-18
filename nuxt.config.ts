@@ -28,4 +28,4 @@ export default defineNuxtConfig({
 			livekitWSurl: "wss://mello-d6rzaz12.livekit.cloud"
 		}
 	}
-})
+});
