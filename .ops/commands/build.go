@@ -29,7 +29,7 @@ func (Ops) Build() {
 		log.Fatal(err)
 	}
 
-	err = rnr.Run("npx", "vitest", "run") 
+	err = rnr.Run(npm, "run", "unit-test") 
 	if err != nil {
 		log.Fatal(err)
 	}
