@@ -2,14 +2,9 @@ package main
 
 import (
 	"lesiw.io/ops"
+	commands "ops/commands"
 )
 
-type Ops struct{}
-
 func main() {
-	ops.Handle(Ops{})
-}
-
-func (Ops) Hello() {
-	println("Hello world!")
+	ops.Handle(commands.Ops{})
 }
