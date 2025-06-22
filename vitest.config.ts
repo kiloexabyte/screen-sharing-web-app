@@ -6,7 +6,7 @@ export default defineVitestConfig({
 		environment: "nuxt",
 		globals: true,
 		include: [
-			"tests/integrations/**/**", // Include integration tests
+			"tests/**", // Include integration tests
 		],
 		// you can optionally set Nuxt-specific environment options
 		// environmentOptions: {

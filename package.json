@@ -9,7 +9,9 @@
 		"preview": "nuxt preview",
 		"postinstall": "nuxt prepare",
 		"pretty": "prettier --write \"./**/*.{js,jsx,mjs,cjs,ts,tsx,json,vue}\"",
-		"prettyCheck": "npx prettier --check \"./**/*.{js,jsx,mjs,cjs,ts,tsx,json,vue}\""
+		"prettyCheck": "npx prettier --check \"./**/*.{js,jsx,mjs,cjs,ts,tsx,json,vue}\"",
+		"unit-test": "npx vitest run tests/units/**",
+		"integration-test": "npx vitest run tests/integration/**"
 	},
 	"dependencies": {
 		"livekit-client": "^2.5.7",
