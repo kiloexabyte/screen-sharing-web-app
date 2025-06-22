@@ -27,13 +27,13 @@ export const UserHostRoom = async (page: Page): Promise<UserHostRoomResult> => {
 export const AssertRoomHosted = async (
 	page: Page,
 	username: string,
-	room: string
+	room: string,
 ) => {
 	const expectedUrl = `${config.baseURL}room?username=${username}&room=${room}&isHost=true&serverSideStreaming=false`;
 	const response = await page.waitForResponse(
 		(response) =>
 			response.url().includes("/api/livekit/roomCheck") &&
-			response.status() === 200
+			response.status() === 200,
 	);
 
 	expect(response.status()).toBe(200);
@@ -44,14 +44,14 @@ export const AssertRoomHosted = async (
 };
 
 export const QuickHostRoom = async (
-	page: Page
+	page: Page,
 ): Promise<UserHostRoomResult> => {
 	const randomThreeDigitNumber = Math.floor(Math.random() * 900) + 100;
 	const usernameInput = "E2E-TEST-USERNAME" + randomThreeDigitNumber;
 	const roomInput = "E2E-TEST-ROOMNAME" + randomThreeDigitNumber;
 
 	await page.goto(
-		`${config.baseURL}room?username=${usernameInput}&room=${roomInput}&isHost=true&serverSideStreaming=false`
+		`${config.baseURL}room?username=${usernameInput}&room=${roomInput}&isHost=true&serverSideStreaming=false`,
 	);
 
 	return { usernameInput, roomInput };
@@ -60,13 +60,13 @@ export const QuickHostRoom = async (
 export const AssertRoomJoined = async (
 	page: Page,
 	username: string,
-	room: string
+	room: string,
 ) => {
 	const expectedUrl = `${config.baseURL}room?username=${username}&room=${room}&isHost=false&serverSideStreaming=false`;
 	const response = await page.waitForResponse(
 		(response) =>
 			response.url().includes("/api/livekit/roomCheck") &&
-			response.status() === 200
+			response.status() === 200,
 	);
 
 	expect(response.status()).toBe(200);

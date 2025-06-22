@@ -9,6 +9,6 @@ export default defineEventHandler(async (event) => {
 
 	return {
 		result: res,
-		statusCode: 200
+		statusCode: 200,
 	};
 });

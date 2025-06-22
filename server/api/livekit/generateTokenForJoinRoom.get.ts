@@ -3,7 +3,7 @@ import {
 	livekitApiKey,
 	livekitApiSecret,
 	roomService,
-	usernameTaken
+	usernameTaken,
 } from "../../utils/livekit";
 
 export default defineEventHandler(async (event) => {
@@ -15,7 +15,7 @@ export default defineEventHandler(async (event) => {
 	if (!room || !username) {
 		return {
 			statusCode: 400,
-			message: "Must provide room and username"
+			message: "Must provide room and username",
 		};
 	}
 
@@ -24,14 +24,14 @@ export default defineEventHandler(async (event) => {
 	if (!roomInLK) {
 		return {
 			statusCode: 400,
-			message: "Room does not exist"
+			message: "Room does not exist",
 		};
 	}
 
 	if (await usernameTaken(username, room)) {
 		return {
 			statusCode: 409,
-			message: "Username is taken"
+			message: "Username is taken",
 		};
 	}
 
@@ -44,7 +44,7 @@ export default defineEventHandler(async (event) => {
 
 	// host name fetching host name
 	const liveKitRoom = (await roomService.listRooms()).filter(
-		(r) => r.name === room
+		(r) => r.name === room,
 	)[0];
 	const metadata = JSON.parse(liveKitRoom.metadata);
 
@@ -53,7 +53,7 @@ export default defineEventHandler(async (event) => {
 		result: "Room exist, returning token",
 		token: token,
 		participantNames: roomParticipantNames,
-		host: metadata.host
+		host: metadata.host,
 	};
 });
 
@@ -61,20 +61,20 @@ const createToken = async (
 	room: string,
 	username: string,
 	canPublish: boolean,
-	canSubscribe: boolean
+	canSubscribe: boolean,
 ) => {
 	const at = new AccessToken(livekitApiKey, livekitApiSecret, {
 		identity: username,
 		// Token to expire after 10 minutes,
 		name: username,
-		ttl: "10m"
+		ttl: "10m",
 	});
 	at.addGrant({
 		roomJoin: true,
 		room: room,
 		canPublish: canPublish,
 		canSubscribe: canSubscribe,
-		canPublishData: true
+		canPublishData: true,
 	});
 
 	const token = await at.toJwt();

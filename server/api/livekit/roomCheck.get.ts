@@ -9,7 +9,7 @@ export default defineEventHandler(async (event) => {
 	if (!roomName) {
 		throw createError({
 			statusCode: 422,
-			statusMessage: "Missing parameter roomName"
+			statusMessage: "Missing parameter roomName",
 		});
 	}
 
@@ -20,19 +20,19 @@ export default defineEventHandler(async (event) => {
 				statusCode: 200,
 				roomExist: true,
 				usernameAvailable: !(await usernameTaken(username, roomName)),
-				message: "Room exist"
+				message: "Room exist",
 			};
 		} else {
 			return {
 				statusCode: 200,
 				roomExist: false,
-				message: "Room does not exist."
+				message: "Room does not exist.",
 			};
 		}
 	} catch (error) {
 		return {
 			statusCode: 500,
-			message: "Internal server error."
+			message: "Internal server error.",
 		};
 	}
 });

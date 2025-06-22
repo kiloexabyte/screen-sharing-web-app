@@ -3,7 +3,7 @@ import { config } from "./E2eConfig";
 import {
 	AssertRoomHosted,
 	AssertRoomJoined,
-	QuickHostRoom
+	QuickHostRoom,
 } from "./HelperFunction";
 
 test("User can join room", async ({ page, browser }) => {
@@ -17,7 +17,7 @@ test("User can join room", async ({ page, browser }) => {
 	const user2name = "user2";
 
 	await page2.goto(
-		`${config.baseURL}room?username=${user2name}&room=${roomInput}&isHost=false&serverSideStreaming=false`
+		`${config.baseURL}room?username=${user2name}&room=${roomInput}&isHost=false&serverSideStreaming=false`,
 	);
 
 	// assert join successful
@@ -35,7 +35,7 @@ test("User can send chat message in lobby", async ({ page, browser }) => {
 	const user2name = "user2";
 
 	await page2.goto(
-		`${config.baseURL}room?username=${user2name}&room=${roomInput}&isHost=false&serverSideStreaming=false`
+		`${config.baseURL}room?username=${user2name}&room=${roomInput}&isHost=false&serverSideStreaming=false`,
 	);
 
 	// assert join successful

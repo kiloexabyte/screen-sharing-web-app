@@ -15,7 +15,7 @@ describe("useChatMessage", () => {
 		pushMessage({
 			username: "test",
 			text: "test",
-			time: "1111"
+			time: "1111",
 		});
 		expect(chatMessages.value.length).toBe(2);
 	});

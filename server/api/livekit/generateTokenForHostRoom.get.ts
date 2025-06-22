@@ -2,7 +2,7 @@ import { AccessToken, CreateOptions } from "livekit-server-sdk";
 import {
 	livekitApiKey,
 	livekitApiSecret,
-	roomService
+	roomService,
 } from "../../utils/livekit";
 
 export default defineEventHandler(async (event) => {
@@ -14,7 +14,7 @@ export default defineEventHandler(async (event) => {
 	if (!room || !username) {
 		return {
 			statusCode: 400,
-			message: "Must provide room and username"
+			message: "Must provide room and username",
 		};
 	}
 
@@ -23,7 +23,7 @@ export default defineEventHandler(async (event) => {
 	if (roomExist) {
 		throw createError({
 			statusCode: 400,
-			statusMessage: "Room already exist"
+			statusMessage: "Room already exist",
 		});
 	}
 
@@ -35,7 +35,7 @@ export default defineEventHandler(async (event) => {
 	return {
 		statusCode: 200,
 		result: "Room created",
-		token: token
+		token: token,
 	};
 });
 
@@ -43,20 +43,20 @@ const createToken = async (
 	room: string,
 	username: string,
 	canPublish: boolean,
-	canSubscribe: boolean
+	canSubscribe: boolean,
 ) => {
 	const at = new AccessToken(livekitApiKey, livekitApiSecret, {
 		identity: username,
 		// Token to expire after 10 minutes,
 		name: username,
-		ttl: "10m"
+		ttl: "10m",
 	});
 	at.addGrant({
 		roomJoin: true,
 		room: room,
 		canPublish: canPublish,
 		canSubscribe: canSubscribe,
-		canPublishData: true
+		canPublishData: true,
 	});
 
 	const token = await at.toJwt();
@@ -70,8 +70,8 @@ const createRoom = async (room: string, hostName: string) => {
 		emptyTimeout: 3 * 60, // 3 minutes
 		maxParticipants: 20,
 		metadata: JSON.stringify({
-			host: hostName
-		})
+			host: hostName,
+		}),
 	};
 
 	roomService.createRoom(opts);

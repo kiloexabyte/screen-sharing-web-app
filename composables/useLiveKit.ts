@@ -10,7 +10,7 @@ import {
 	type ScreenShareCaptureOptions,
 	type ChatMessage as LiveKitChatMessage,
 	DataPacket_Kind,
-	type DataPublishOptions
+	type DataPublishOptions,
 } from "livekit-client";
 import moment from "moment";
 
@@ -35,16 +35,16 @@ const servers = {
 				"stun:global.stun.twilio.com:3478",
 				"stun:stun4.l.google.com:19302",
 				"stun:stun3.l.google.com:19302",
-				"stun:stun.l.google.com:19302"
-			]
-		}
-	]
+				"stun:stun.l.google.com:19302",
+			],
+		},
+	],
 };
 const streamSetting = {
 	video: {
 		width: { ideal: 2560, max: 2560 },
 		height: { ideal: 1440, max: 1440 },
-		frameRate: { ideal: 60, max: 60 }
+		frameRate: { ideal: 60, max: 60 },
 	},
 	audio: {
 		autoGainControl: false,
@@ -52,8 +52,8 @@ const streamSetting = {
 		echoCancellation: false,
 		noiseSuppression: false,
 		sampleRate: 48000,
-		sampleSize: 16
-	}
+		sampleSize: 16,
+	},
 };
 
 export function useLiveKit() {
@@ -62,11 +62,11 @@ export function useLiveKit() {
 	const fetchToken = async (
 		roomName: string,
 		username: string,
-		isHost: boolean
+		isHost: boolean,
 	) => {
 		const params = new URLSearchParams({
 			room: roomName,
-			username: username
+			username: username,
 		});
 
 		if (isHost) {
@@ -74,8 +74,8 @@ export function useLiveKit() {
 			const response = await fetch(
 				`/api/livekit/generateTokenForHostRoom?${params.toString()}`,
 				{
-					method: "GET"
-				}
+					method: "GET",
+				},
 			);
 
 			if (response.ok) {
@@ -83,7 +83,7 @@ export function useLiveKit() {
 				token.value = data.token; // Access the token from the parsed data
 
 				return {
-					token: data.token
+					token: data.token,
 				};
 			} else {
 				throw new Error(`Error fetching token: 
@@ -94,8 +94,8 @@ export function useLiveKit() {
 			const response = await fetch(
 				`/api/livekit/generateTokenForJoinRoom?${params.toString()}`,
 				{
-					method: "GET"
-				}
+					method: "GET",
+				},
 			);
 
 			if (response.ok) {
@@ -108,7 +108,7 @@ export function useLiveKit() {
 				return {
 					host: data.host,
 					token: data.token,
-					participantNames: data.participantNames
+					participantNames: data.participantNames,
 				};
 			} else {
 				throw new Error(`Error fetching token: 
@@ -120,12 +120,12 @@ export function useLiveKit() {
 	const joinRoom = async (
 		roomName: string,
 		username: string,
-		remoteVideoElement: HTMLMediaElement
+		remoteVideoElement: HTMLMediaElement,
 	) => {
 		const handleTrackSubscribed = async (
 			_track: RemoteTrack,
 			publication: RemoteTrackPublication,
-			_participant: RemoteParticipant
+			_participant: RemoteParticipant,
 		) => {
 			publication.setVideoQuality(2);
 			publication.setVideoFPS(60);
@@ -136,7 +136,7 @@ export function useLiveKit() {
 			payload: Uint8Array<ArrayBufferLike>,
 			participant?: RemoteParticipant | undefined,
 			_kind?: DataPacket_Kind | undefined,
-			_topic?: string | undefined
+			_topic?: string | undefined,
 		): Promise<void> => {
 			const decoder = new TextDecoder();
 			const strData = decoder.decode(payload);
@@ -148,7 +148,7 @@ export function useLiveKit() {
 						await createAnswer(
 							participant?.identity ?? "",
 							message.offer,
-							remoteVideoElement
+							remoteVideoElement,
 						);
 					}
 					break;
@@ -181,7 +181,7 @@ export function useLiveKit() {
 		currentRoom.value.on(RoomEvent.ParticipantConnected, handleParticipantJoin);
 		currentRoom.value.on(
 			RoomEvent.ParticipantDisconnected,
-			handleParticipantLeave
+			handleParticipantLeave,
 		);
 		currentRoom.value.on(RoomEvent.ChatMessage, handleChatMessage);
 
@@ -190,7 +190,7 @@ export function useLiveKit() {
 		participantNames.value = fetchedToken?.participantNames;
 
 		return {
-			host: fetchedToken?.host
+			host: fetchedToken?.host,
 		};
 	};
 
@@ -204,13 +204,13 @@ export function useLiveKit() {
 		roomName: string,
 		username: string,
 		serverSideStreaming: boolean,
-		localVideoElement: HTMLMediaElement | null
+		localVideoElement: HTMLMediaElement | null,
 	) => {
 		const handleDataReceived = async (
 			payload: Uint8Array<ArrayBufferLike>,
 			participant?: RemoteParticipant | undefined,
 			_kind?: DataPacket_Kind | undefined,
-			_topic?: string | undefined
+			_topic?: string | undefined,
 		): Promise<void> => {
 			const decoder = new TextDecoder();
 			const strData = decoder.decode(payload);
@@ -262,8 +262,8 @@ export function useLiveKit() {
 				resolution: {
 					height: 1440,
 					width: 2560,
-					frameRate: 60
-				}
+					frameRate: 60,
+				},
 			},
 			audioCaptureDefaults: {
 				autoGainControl: false,
@@ -271,8 +271,8 @@ export function useLiveKit() {
 				echoCancellation: false,
 				channelCount: 2,
 				sampleRate: 48000,
-				sampleSize: 16
-			}
+				sampleSize: 16,
+			},
 		};
 
 		currentRoom.value = new Room(options);
@@ -280,11 +280,11 @@ export function useLiveKit() {
 		// room event for both P2P and sever-side streaming
 		currentRoom.value.on(
 			RoomEvent.ParticipantConnected,
-			handleParticipantJoinAsHost
+			handleParticipantJoinAsHost,
 		);
 		currentRoom.value.on(
 			RoomEvent.ParticipantDisconnected,
-			handleParticipantLeave
+			handleParticipantLeave,
 		);
 		currentRoom.value.on(RoomEvent.ChatMessage, handleChatMessage);
 
@@ -315,12 +315,12 @@ export function useLiveKit() {
 
 	const handleChatMessage = async (
 		message: LiveKitChatMessage,
-		participant?: RemoteParticipant | LocalParticipant | undefined
+		participant?: RemoteParticipant | LocalParticipant | undefined,
 	) => {
 		const mappedMsg: ChatMessage = {
 			username: participant?.name ?? "",
 			text: message.message,
-			time: moment().format("LT")
+			time: moment().format("LT"),
 		};
 
 		pushMessage(mappedMsg);
@@ -334,14 +334,14 @@ export function useLiveKit() {
 				echoCancellation: false,
 				channelCount: 2,
 				sampleRate: 48000,
-				sampleSize: 16
+				sampleSize: 16,
 			},
 			preferCurrentTab: false,
 			resolution: {
 				height: 1440,
 				width: 2560,
-				frameRate: 60
-			}
+				frameRate: 60,
+			},
 		};
 
 		const screenshareEnabled =
@@ -350,7 +350,7 @@ export function useLiveKit() {
 		const screensharePub =
 			await currentRoom.value?.localParticipant.setScreenShareEnabled(
 				!screenshareEnabled,
-				screenshareSettings
+				screenshareSettings,
 			);
 
 		screensharePub?.videoTrack?.attach(videoElement);
@@ -362,8 +362,8 @@ export function useLiveKit() {
 		const res = await fetch(
 			`/api/livekit/getUsersInRoom?roomName=${currentRoom.value?.name.toString().trim()}`,
 			{
-				method: "GET"
-			}
+				method: "GET",
+			},
 		);
 
 		if (!res.ok) {
@@ -397,7 +397,7 @@ export function useLiveKit() {
 
 	const sendWebSocketPayload = async (
 		payload: object,
-		options?: DataPublishOptions
+		options?: DataPublishOptions,
 	) => {
 		const strData = JSON.stringify(payload);
 		const encoder = new TextEncoder();
@@ -414,7 +414,7 @@ export function useLiveKit() {
 
 	const createPeerConnection = async (
 		identity: string,
-		videoPlayer: HTMLMediaElement
+		videoPlayer: HTMLMediaElement,
 	) => {
 		const newPeerConnection = new RTCPeerConnection(servers);
 
@@ -440,12 +440,12 @@ export function useLiveKit() {
 			if (event.candidate) {
 				const payload = {
 					type: "candidate",
-					candidate: event.candidate
+					candidate: event.candidate,
 				};
 
 				await sendWebSocketPayload(payload, {
 					reliable: true,
-					destinationIdentities: [identity]
+					destinationIdentities: [identity],
 				});
 			}
 		};
@@ -456,7 +456,7 @@ export function useLiveKit() {
 
 	const createOffer = async (
 		identity: string,
-		videoPlayer: HTMLMediaElement
+		videoPlayer: HTMLMediaElement,
 	) => {
 		const peerConnection = await createPeerConnection(identity, videoPlayer);
 		if (peerConnection) {
@@ -467,7 +467,7 @@ export function useLiveKit() {
 			// send offer
 			await sendWebSocketPayload(payload, {
 				reliable: true,
-				destinationIdentities: [identity]
+				destinationIdentities: [identity],
 			});
 		}
 	};
@@ -475,13 +475,13 @@ export function useLiveKit() {
 	const createAnswer = async (
 		identity: string,
 		offer: RTCSessionDescriptionInit,
-		videoPlayer: HTMLMediaElement
+		videoPlayer: HTMLMediaElement,
 	) => {
 		await clearPeerConnection();
 
 		const peerConnection = await createPeerConnectionAnswer(
 			identity,
-			videoPlayer
+			videoPlayer,
 		);
 		await peerConnection?.setRemoteDescription(offer);
 
@@ -493,13 +493,13 @@ export function useLiveKit() {
 
 		await sendWebSocketPayload(payload, {
 			reliable: true,
-			destinationIdentities: [identity]
+			destinationIdentities: [identity],
 		});
 	};
 
 	const addAnswer = async (
 		identity: string,
-		answer: RTCSessionDescriptionInit
+		answer: RTCSessionDescriptionInit,
 	) => {
 		const peerConnection: RTCPeerConnection | undefined =
 			peerConnections.value.get(identity);
@@ -518,7 +518,7 @@ export function useLiveKit() {
 
 	const createPeerConnectionAnswer = async (
 		identity: string,
-		videoPlayer: HTMLMediaElement
+		videoPlayer: HTMLMediaElement,
 	) => {
 		const oldPeerConnection = peerConnections.value.get(identity);
 		oldPeerConnection?.close();
@@ -545,11 +545,11 @@ export function useLiveKit() {
 			if (event.candidate) {
 				const payload = {
 					type: "candidate",
-					candidate: event.candidate
+					candidate: event.candidate,
 				};
 				await sendWebSocketPayload(payload, {
 					reliable: true,
-					destinationIdentities: [identity]
+					destinationIdentities: [identity],
 				});
 			}
 		};
@@ -593,6 +593,6 @@ export function useLiveKit() {
 		addAnswer,
 		toggleScreenshareP2P,
 		cleanUpData,
-		isServerSideStreaming
+		isServerSideStreaming,
 	};
 }

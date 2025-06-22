@@ -26,7 +26,7 @@ test("Host room reroute page to /room", async ({ page }) => {
 
 test("User can't host room if room name is taken", async ({
 	page,
-	browser
+	browser,
 }) => {
 	const { usernameInput, roomInput } = await UserHostRoom(page);
 
@@ -49,7 +49,7 @@ test("User can't host room if room name is taken", async ({
 	const response2 = await page2.waitForResponse(
 		(response) =>
 			response.url().includes("/api/livekit/roomCheck") &&
-			response.status() === 200
+			response.status() === 200,
 	);
 	expect(response2.status()).toBe(200);
 
@@ -77,7 +77,7 @@ test("User can't join room if username is taken", async ({ page, browser }) => {
 	const response2 = await page2.waitForResponse(
 		(response) =>
 			response.url().includes("/api/livekit/roomCheck") &&
-			response.status() === 200
+			response.status() === 200,
 	);
 	expect(response2.status()).toBe(200);
 

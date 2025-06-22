@@ -12,21 +12,21 @@ const username = ref("");
 const room = ref("");
 const touched = ref({
 	username: false,
-	room: false
+	room: false,
 });
 const serverSideStreaming = ref(false);
 
 const isUsernameValid = computed(
-	() => username.value.trim().length > 0 && username.value.trim().length <= 30
+	() => username.value.trim().length > 0 && username.value.trim().length <= 30,
 );
 const isRoomValid = computed(
-	() => room.value.trim().length > 0 && room.value.trim().length <= 30
+	() => room.value.trim().length > 0 && room.value.trim().length <= 30,
 );
 const showUsernameValidation = computed(
-	() => touched.value.username && !isUsernameValid.value
+	() => touched.value.username && !isUsernameValid.value,
 );
 const showRoomValidation = computed(
-	() => touched.value.room && !isRoomValid.value
+	() => touched.value.room && !isRoomValid.value,
 );
 
 function setUsernameTouched() {
@@ -41,7 +41,7 @@ async function showError(summary: string, detail: string) {
 		severity: "error",
 		summary,
 		detail,
-		life: 3000
+		life: 3000,
 	});
 }
 
@@ -49,13 +49,13 @@ async function joinRoom() {
 	if (!isUsernameValid.value || !isRoomValid.value) return;
 
 	const res = await fetch(
-		`/api/livekit/roomCheck?roomName=${room.value.trim()}&username=${username.value.trim()}`
+		`/api/livekit/roomCheck?roomName=${room.value.trim()}&username=${username.value.trim()}`,
 	);
 
 	if (!res.ok) {
 		await showError(
 			"Network Error",
-			"Error occurred while checking if server exists."
+			"Error occurred while checking if server exists.",
 		);
 		return;
 	}
@@ -77,8 +77,8 @@ async function joinRoom() {
 		query: {
 			username: username.value.trim(),
 			room: room.value.trim(),
-			isHost: "false"
-		}
+			isHost: "false",
+		},
 	});
 }
 
@@ -87,12 +87,12 @@ async function hostRoom() {
 		room.value = foodList[Math.floor(Math.random() * foodList.length)];
 	} else {
 		const res = await fetch(
-			`/api/livekit/roomCheck?roomName=${room.value.trim()}&username=${username.value.trim()}`
+			`/api/livekit/roomCheck?roomName=${room.value.trim()}&username=${username.value.trim()}`,
 		);
 		if (!res.ok) {
 			await showError(
 				"Network Error",
-				"Error occurred while checking if server exists."
+				"Error occurred while checking if server exists.",
 			);
 			return;
 		}
@@ -115,8 +115,8 @@ async function hostRoom() {
 			username: username.value.trim(),
 			room: room.value.trim(),
 			isHost: "true",
-			serverSideStreaming: serverSideStreaming.value.toString()
-		}
+			serverSideStreaming: serverSideStreaming.value.toString(),
+		},
 	});
 }
 </script>

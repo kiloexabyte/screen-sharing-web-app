@@ -12,18 +12,18 @@ export function formatMessage(username: string, text: string) {
 	return {
 		username,
 		text,
-		time: moment().utc().format("YYYY-MM-DDTHH:mm:ss")
+		time: moment().utc().format("YYYY-MM-DDTHH:mm:ss"),
 	};
 }
 
 export function formatWebRTCResponse(
 	username: string,
 	payload: string,
-	socketId: string
+	socketId: string,
 ) {
 	return {
 		username,
 		payload,
-		socketId
+		socketId,
 	};
 }

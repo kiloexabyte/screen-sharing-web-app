@@ -104,5 +104,5 @@ export const foodList = [
 	"watermelon",
 	"ketchup",
 	"spam",
-	"jalapeno"
+	"jalapeno",
 ];

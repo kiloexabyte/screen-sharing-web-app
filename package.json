@@ -39,7 +39,7 @@
 		"semi": true,
 		"singleQuote": false,
 		"useTabs": true,
-		"trailingComma": "none",
+		"trailingComma": "all",
 		"bracketSpacing": true,
 		"arrowParens": "always",
 		"plugins": [

@@ -20,7 +20,7 @@ const {
 	toggleScreenshare,
 	cleanUpData,
 	participantNames,
-	isServerSideStreaming
+	isServerSideStreaming,
 } = useLiveKit();
 
 const route = useRoute();
@@ -43,13 +43,13 @@ const adjustVolume = (event: KeyboardEvent) => {
 		case "ArrowUp":
 			localVideo.value.volume = Math.min(
 				localVideo.value.volume + volumeChangeAmount,
-				1
+				1,
 			);
 			break;
 		case "ArrowDown":
 			localVideo.value.volume = Math.max(
 				localVideo.value.volume - volumeChangeAmount,
-				0
+				0,
 			);
 			break;
 	}
@@ -121,7 +121,7 @@ onMounted(async () => {
 	isServerSideStreaming.value = serverSideStreaming === "true";
 	// check if room already exist
 	const res = await fetch(`/api/livekit/roomCheck?roomName=${room}`, {
-		method: "GET"
+		method: "GET",
 	});
 
 	if (!res.ok) {
@@ -144,7 +144,7 @@ onMounted(async () => {
 				room.toString() ?? "",
 				username.toString() ?? "",
 				serverSideStreamingEnabled.value,
-				localVideo.value
+				localVideo.value,
 			);
 			currentHost.value = username;
 			currentRoom.value = room;
@@ -160,7 +160,7 @@ onMounted(async () => {
 				const { host } = await joinRoom(
 					room.toString() ?? "",
 					username.toString() ?? "",
-					localVideo.value
+					localVideo.value,
 				);
 				currentHost.value = host;
 				currentRoom.value = room;
