@@ -78,7 +78,9 @@ export function useLiveKit() {
 					token: data.token,
 				};
 			} else {
-				throw new Error(`Error fetching token: HTTP request status ${response.status}`);
+				throw new Error(
+					`Error fetching token: HTTP request status ${response.status}`,
+				);
 			}
 		} else {
 			const response = await GenerateTokenForJoinRoom(username, roomName);
@@ -94,7 +96,9 @@ export function useLiveKit() {
 					participantNames: data.participantNames,
 				};
 			} else {
-				throw new Error(`Error fetching token: HTTP request status ${response.status}`);
+				throw new Error(
+					`Error fetching token: HTTP request status ${response.status}`,
+				);
 			}
 		}
 	};
@@ -339,7 +343,9 @@ export function useLiveKit() {
 	};
 
 	const toggleScreenshareP2P = async (videoElement: HTMLMediaElement) => {
-		const res = await GetUsersInRoom(currentRoom.value?.name.toString().trim() ?? "");
+		const res = await GetUsersInRoom(
+			currentRoom.value?.name.toString().trim() ?? "",
+		);
 		if (!res.ok) {
 			throw new Error("error fetching users in lobby");
 		}
