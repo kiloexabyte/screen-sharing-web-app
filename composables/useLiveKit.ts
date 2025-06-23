@@ -13,6 +13,11 @@ import {
 	type DataPublishOptions,
 } from "livekit-client";
 import moment from "moment";
+import {
+	GenerateTokenForHostRoom,
+	GenerateTokenForJoinRoom,
+	GetUsersInRoom,
+} from "~/lib/signaling-server";
 
 const runtimeConfig = useRuntimeConfig();
 const participantNames = ref<string[]>([]);
@@ -64,44 +69,22 @@ export function useLiveKit() {
 		username: string,
 		isHost: boolean,
 	) => {
-		const params = new URLSearchParams({
-			room: roomName,
-			username: username,
-		});
-
 		if (isHost) {
-			// Hosting Room
-			const response = await fetch(
-				`/api/livekit/generateTokenForHostRoom?${params.toString()}`,
-				{
-					method: "GET",
-				},
-			);
-
+			const response = await GenerateTokenForHostRoom(username, roomName);
 			if (response.ok) {
-				const data = await response.json(); // Parse the response to JSON
-				token.value = data.token; // Access the token from the parsed data
-
+				const data = await response.json();
+				token.value = data.token;
 				return {
 					token: data.token,
 				};
 			} else {
-				throw new Error(`Error fetching token: 
-					HTTP request status ${response.status}`);
+				throw new Error(`Error fetching token: HTTP request status ${response.status}`);
 			}
 		} else {
-			// Joining a room
-			const response = await fetch(
-				`/api/livekit/generateTokenForJoinRoom?${params.toString()}`,
-				{
-					method: "GET",
-				},
-			);
-
+			const response = await GenerateTokenForJoinRoom(username, roomName);
 			if (response.ok) {
-				const data = await response.json(); // Parse the response to JSON
-				token.value = data.token; // Access the token from the parsed data
-
+				const data = await response.json();
+				token.value = data.token;
 				if (data.statusCode === 409) {
 					throw new Error("Username is Taken");
 				}
@@ -111,8 +94,7 @@ export function useLiveKit() {
 					participantNames: data.participantNames,
 				};
 			} else {
-				throw new Error(`Error fetching token: 
-					HTTP request status ${response.status}`);
+				throw new Error(`Error fetching token: HTTP request status ${response.status}`);
 			}
 		}
 	};
@@ -357,23 +339,13 @@ export function useLiveKit() {
 	};
 
 	const toggleScreenshareP2P = async (videoElement: HTMLMediaElement) => {
-		// foreach users in the lobby, create and send webrtc offer
-		// make api call to get all participants
-		const res = await fetch(
-			`/api/livekit/getUsersInRoom?roomName=${currentRoom.value?.name.toString().trim()}`,
-			{
-				method: "GET",
-			},
-		);
-
+		const res = await GetUsersInRoom(currentRoom.value?.name.toString().trim() ?? "");
 		if (!res.ok) {
 			throw new Error("error fetching users in lobby");
 		}
-
 		const data = await res.json();
 		await clearPeerConnection();
 
-		// foreach users in the lobby
 		if (
 			localStream.value &&
 			localStream.value
@@ -384,7 +356,7 @@ export function useLiveKit() {
 		} else {
 			for (const p of data.result) {
 				if (p.name === currentUsername.value) {
-					continue; // Skip to the next iteration
+					continue;
 				}
 				await createOffer(p.identity, videoElement);
 			}
