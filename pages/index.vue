@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
-import InputText from "primevue/inputtext";
-import { useToast } from "primevue/usetoast";
 import { useRouter } from "vue-router";
 import { foodList } from "~/lib/foodList";
 
