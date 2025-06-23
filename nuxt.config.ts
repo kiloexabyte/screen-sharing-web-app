@@ -1,5 +1,5 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-import lara from '@primeuix/themes/lara';
+import lara from "@primeuix/themes/lara";
 
 export default defineNuxtConfig({
 	app: {
@@ -17,7 +17,7 @@ export default defineNuxtConfig({
 			autoprefixer: {},
 		},
 	},
-	modules: ['@primevue/nuxt-module'],
+	modules: ["@primevue/nuxt-module"],
 	primevue: {
 		/* Options */
 		options: {
@@ -25,8 +25,8 @@ export default defineNuxtConfig({
 			inputStyle: "filled",
 			theme: {
 				preset: lara,
-				options: {}
-			}
+				options: {},
+			},
 		},
 	},
 	runtimeConfig: {
