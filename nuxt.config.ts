@@ -31,7 +31,7 @@ export default defineNuxtConfig({
 	},
 	runtimeConfig: {
 		public: {
-			livekitWSurl: "wss://mello-d6rzaz12.livekit.cloud",
+			livekitWSurl: "wss://screensharing-web-app-nxkeok9z.livekit.cloud",
 		},
 	},
 });
