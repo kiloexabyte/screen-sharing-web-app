@@ -1,4 +1,4 @@
-let API_BASE = "https://screen-sharing-web-app-ebon.vercel.app/";
+let API_BASE = "https://screen-sharing-web-app-ebon.vercel.app";
 
 export const setApiBase = (url: string) => {
 	API_BASE = url;
