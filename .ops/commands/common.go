@@ -1,15 +1,16 @@
 package commands
 
 import (
-	"lesiw.io/cmdio"
+	"context"
+
+	"lesiw.io/command"
 )
 
-
-func useNpmOrPnpm(rnr *cmdio.Runner) string {
+func useNpmOrPnpm(ctx context.Context, sh *command.Sh) string {
 	// GH actions runner come with npm pre installed, but pnpm is used for local development
-	if err := rnr.Run("which", "pnpm"); err == nil {
+	if err := sh.Exec(ctx, "pnpm", "--version"); err == nil {
 		return "pnpm"
-	} 
-	
+	}
+
 	return "npm"
 }

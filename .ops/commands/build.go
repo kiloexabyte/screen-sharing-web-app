@@ -1,45 +1,45 @@
 package commands
 
 import (
+	"context"
 	"log"
 
-	"lesiw.io/cmdio/sys"
+	"lesiw.io/command"
+	"lesiw.io/command/sys"
 )
 
 func (Ops) Build() {
-	var rnr = sys.Runner().WithEnv(map[string]string{
-		"PKGNAME": "cmdio",
-	})
-	defer rnr.Close()
+	ctx := context.Background()
+	sh := command.Shell(sys.Machine(), "echo", "npm", "pnpm")
 
-	npm := useNpmOrPnpm(rnr)
+	npm := useNpmOrPnpm(ctx, sh)
 
-	err := rnr.Run("echo", "hello from", rnr.Env("PKGNAME"))
+	err := sh.Exec(ctx, "echo", "hello from cmdbuf")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	err = rnr.Run(npm, "install")
+	err = sh.Exec(ctx, npm, "install")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	err = rnr.Run(npm, "run", "prettyCheck")
+	err = sh.Exec(ctx, npm, "run", "prettyCheck")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	err = rnr.Run(npm, "run", "unit-test") 
+	err = sh.Exec(ctx, npm, "run", "unit-test")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	err = rnr.Run(npm, "run", "build")
+	err = sh.Exec(ctx, npm, "run", "build")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	err = rnr.Run("echo", "goodbye from", rnr.Env("PKGNAME"))
+	err = sh.Exec(ctx, "echo", "goodbye from cmdbuf")
 	if err != nil {
 		log.Fatal(err)
 	}
