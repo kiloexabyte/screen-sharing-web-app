@@ -19,20 +19,9 @@ import {
 	GetUsersInRoom,
 } from "~/lib/signaling-server";
 
-const runtimeConfig = useRuntimeConfig();
-const participantNames = ref<string[]>([]);
-const wsUrl = runtimeConfig.public.livekitWSurl;
-const token = ref<string>("");
-const currentRoom = ref<Room | null>(null);
-const currentUsername = ref<string>("");
-const isServerSideStreaming = ref<boolean>();
-
 // Define a type for the peer connections map
 type PeerConnectionsMap = Map<string, RTCPeerConnection>;
 
-// these states are used for p2p streams
-const localStream = ref<MediaStream | null>(null);
-const peerConnections: Ref<PeerConnectionsMap> = ref(new Map());
 const servers = {
 	iceServers: [
 		{
@@ -61,7 +50,32 @@ const streamSetting = {
 	},
 };
 
+// Module-level state (shared across all useLiveKit() calls)
+let participantNames: Ref<string[]>;
+let token: Ref<string>;
+let currentRoom: Ref<Room | null>;
+let currentUsername: Ref<string>;
+let isServerSideStreaming: Ref<boolean | undefined>;
+let localStream: Ref<MediaStream | null>;
+let peerConnections: Ref<PeerConnectionsMap>;
+let wsUrl: string;
+let initialized = false;
+
 export function useLiveKit() {
+	// Initialize state lazily inside the composable (SSR-safe)
+	if (!initialized) {
+		const runtimeConfig = useRuntimeConfig();
+		wsUrl = runtimeConfig.public.livekitWSurl as string;
+		participantNames = ref<string[]>([]);
+		token = ref<string>("");
+		currentRoom = ref<Room | null>(null);
+		currentUsername = ref<string>("");
+		isServerSideStreaming = ref<boolean>();
+		localStream = ref<MediaStream | null>(null);
+		peerConnections = ref(new Map());
+		initialized = true;
+	}
+
 	const { pushNotification, pushMessage, clearMessages } = useChatMessage();
 
 	const fetchToken = async (
