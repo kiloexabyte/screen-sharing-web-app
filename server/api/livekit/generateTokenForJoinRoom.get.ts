@@ -46,7 +46,7 @@ export default defineEventHandler(async (event) => {
 	const liveKitRoom = (await roomService.listRooms()).filter(
 		(r) => r.name === room,
 	)[0];
-	const metadata = JSON.parse(liveKitRoom.metadata);
+	const metadata = liveKitRoom.metadata ? JSON.parse(liveKitRoom.metadata) : {};
 
 	return {
 		statusCode: 200,

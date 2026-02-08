@@ -74,5 +74,5 @@ const createRoom = async (room: string, hostName: string) => {
 		}),
 	};
 
-	roomService.createRoom(opts);
+	await roomService.createRoom(opts);
 };
