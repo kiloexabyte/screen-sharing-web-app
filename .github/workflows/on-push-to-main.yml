@@ -1,0 +1,32 @@
+name: On Push To Main
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - "**.md"
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: 
+      image: kiloexabyte/runner-image
+    steps:
+      - uses: actions/checkout@v6
+      - name: Cache node modules
+        uses: actions/cache@v3
+        with:
+          path: repo/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Run Go script
+        run: |
+          op build
