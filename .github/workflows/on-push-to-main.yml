@@ -28,6 +28,8 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Run Go script
+        env: 
+          GOFLAGS: -buildvcs=false
         run: |
           op lint
           op test
