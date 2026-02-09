@@ -29,4 +29,6 @@ jobs:
 
       - name: Run Go script
         run: |
+          op lint
+          op test
           op build
