@@ -124,7 +124,7 @@ async function hostRoom() {
 	<Navbar class="absolute left-0 top-0" />
 	<div class="flex h-screen items-center justify-center bg-[#82d2e8]">
 		<TabView class="shadow-2xl">
-			<TabPanel header="Join Room">
+			<TabPanel header="Join Room" value="join">
 				<div
 					class="flex h-[350px] w-[500px] flex-col items-center justify-center"
 				>
@@ -169,12 +169,12 @@ async function hostRoom() {
 							label="Join Room"
 							type="submit"
 							:disabled="!isUsernameValid || !isRoomValid"
-							class="h-12 w-32 cursor-pointer rounded-md bg-[rgb(99,160,177)] text-black"
+							class="h-12 w-32 cursor-pointer rounded-md !bg-[rgb(99,160,177)] !border-black text-black"
 						/>
 					</form>
 				</div>
 			</TabPanel>
-			<TabPanel header="Host Room">
+			<TabPanel header="Host Room" value="host">
 				<div
 					class="flex h-[350px] w-[500px] flex-col items-center justify-center"
 				>
@@ -223,7 +223,7 @@ async function hostRoom() {
 						<Button
 							label="Host Room"
 							type="submit"
-							class="h-12 w-32 cursor-pointer rounded-md bg-[rgb(99,160,177)] text-black"
+							class="h-12 w-32 cursor-pointer rounded-md !bg-[rgb(99,160,177)] !border-black text-black"
 						/>
 					</form>
 				</div>
@@ -233,23 +233,32 @@ async function hostRoom() {
 </template>
 
 <style>
-/* Ensures the tab headers fill the entire width of the tab panel container */
-.p-tabview-nav li {
-	width: 100%;
-}
-
-.p-tabview-nav li a span {
-	width: 100%;
-	text-align: center;
-}
-
-.p-tabview-nav-content {
-	border-top-right-radius: 6px;
-	border-top-left-radius: 6px;
-	background-color: #1f2937;
-}
-
 .p-button-label {
 	font-weight: 400;
+}
+
+.p-inputtext:focus {
+	border-color: #82d2e8 !important;
+	box-shadow: 0 0 0 2px rgba(130, 210, 232, 0.5) !important;
+}
+
+.p-tabview-nav {
+	width: 100% !important;
+	display: flex !important;
+	justify-content: center !important;
+}
+
+.p-tabview-tablist {
+	width: 100% !important;
+	display: flex !important;
+	justify-content: center !important;
+}
+
+.p-tabview-ink-bar {
+	background-color: #82d2e8 !important;
+}
+
+.p-tabview-tab-active {
+	border-color: #82d2e8 !important;
 }
 </style>
