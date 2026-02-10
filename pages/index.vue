@@ -81,9 +81,7 @@ async function joinRoom() {
 }
 
 async function hostRoom() {
-	if (!room.value) {
-		room.value = foodList[Math.floor(Math.random() * foodList.length)];
-	} else {
+	if (room.value) {
 		const res = await fetch(
 			`/api/livekit/roomCheck?roomName=${room.value.trim()}&username=${username.value.trim()}`,
 		);
@@ -99,6 +97,8 @@ async function hostRoom() {
 			await showError("Error Creating Room", "Room Already Exists");
 			return;
 		}
+	} else {
+		room.value = foodList[Math.floor(Math.random() * foodList.length)];
 	}
 
 	if (!username.value) {
