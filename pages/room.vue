@@ -58,20 +58,7 @@ const adjustVolume = (event: KeyboardEvent) => {
 const toggleFullScreen = (): void => {
 	if (!localVideo.value) return;
 
-	if (!document.fullscreenElement) {
-		if (localVideo.value.requestFullscreen) {
-			localVideo.value.requestFullscreen();
-		} else if ((localVideo.value as any).mozRequestFullScreen) {
-			/* Firefox */
-			(localVideo.value as any).mozRequestFullScreen();
-		} else if ((localVideo.value as any).webkitRequestFullscreen) {
-			/* Chrome, Safari & Opera */
-			(localVideo.value as any).webkitRequestFullscreen();
-		} else if ((localVideo.value as any).msRequestFullscreen) {
-			/* IE/Edge */
-			(localVideo.value as any).msRequestFullscreen();
-		}
-	} else {
+	if (document.fullscreenElement) {
 		if (document.exitFullscreen) {
 			document.exitFullscreen();
 		} else if ((document as any).mozCancelFullScreen) {
@@ -84,6 +71,17 @@ const toggleFullScreen = (): void => {
 			/* IE/Edge */
 			(document as any).msExitFullscreen();
 		}
+	} else if (localVideo.value.requestFullscreen) {
+		localVideo.value.requestFullscreen();
+	} else if ((localVideo.value as any).mozRequestFullScreen) {
+		/* Firefox */
+		(localVideo.value as any).mozRequestFullScreen();
+	} else if ((localVideo.value as any).webkitRequestFullscreen) {
+		/* Chrome, Safari & Opera */
+		(localVideo.value as any).webkitRequestFullscreen();
+	} else if ((localVideo.value as any).msRequestFullscreen) {
+		/* IE/Edge */
+		(localVideo.value as any).msRequestFullscreen();
 	}
 };
 
@@ -171,7 +169,7 @@ onMounted(async () => {
 		failureMessage.value = err.toString();
 	}
 
-	window.addEventListener("keydown", adjustVolume);
+	globalThis.addEventListener("keydown", adjustVolume);
 
 	if (localVideo.value) {
 		// Add click event listener to prevent play/pause
@@ -181,7 +179,7 @@ onMounted(async () => {
 
 onBeforeUnmount(async () => {
 	await cleanUpData();
-	window.removeEventListener("keydown", adjustVolume);
+	globalThis.removeEventListener("keydown", adjustVolume);
 	if (localVideo.value) {
 		// Remove the click event listener
 		localVideo.value.removeEventListener("click", preventPlayPause);
