@@ -29,7 +29,7 @@ export default defineEventHandler(async (event) => {
 				message: "Room does not exist.",
 			};
 		}
-	} catch (error) {
+	} catch {
 		return {
 			statusCode: 500,
 			message: "Internal server error.",
