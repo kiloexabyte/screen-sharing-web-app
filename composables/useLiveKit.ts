@@ -68,7 +68,7 @@ export function useLiveKit() {
 		wsUrl = runtimeConfig.public.livekitWSurl as string;
 		participantNames = ref<string[]>([]);
 		token = ref<string>("");
-		currentRoom = ref<Room | null>(null);
+		currentRoom = ref(null) as Ref<Room | null>;
 		currentUsername = ref<string>("");
 		isServerSideStreaming = ref<boolean>();
 		localStream = ref<MediaStream | null>(null);
@@ -152,12 +152,13 @@ export function useLiveKit() {
 						);
 					}
 					break;
-				case "candidate":
+				case "candidate": {
 					const pc = peerConnections.value.get(participant?.identity ?? "");
 					if (pc) {
 						pc.addIceCandidate(new RTCIceCandidate(message.candidate));
 					}
 					break;
+				}
 			}
 		};
 
@@ -220,12 +221,13 @@ export function useLiveKit() {
 				case "answer":
 					await addAnswer(participant?.identity ?? "", message.answer);
 					break;
-				case "candidate":
+				case "candidate": {
 					const pc = peerConnections.value.get(participant?.identity ?? "");
 					if (pc) {
 						pc.addIceCandidate(new RTCIceCandidate(message.candidate));
 					}
 					break;
+				}
 			}
 		};
 
@@ -304,7 +306,7 @@ export function useLiveKit() {
 	const handleParticipantLeave = async (participant: RemoteParticipant) => {
 		if (!participant.name) return;
 		const name = participant.name;
-		const index = participantNames.value.findIndex((p: string) => p === name);
+		const index = participantNames.value.indexOf(name);
 
 		if (index !== -1) {
 			participantNames.value.splice(index, 1); // Remove the object at the found index
