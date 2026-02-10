@@ -169,7 +169,7 @@ async function hostRoom() {
 							label="Join Room"
 							type="submit"
 							:disabled="!isUsernameValid || !isRoomValid"
-							class="h-12 w-32 cursor-pointer rounded-md !bg-[rgb(99,160,177)] !border-black text-black"
+							class="h-12 w-32 cursor-pointer rounded-md !border-black !bg-[rgb(99,160,177)] text-black"
 						/>
 					</form>
 				</div>
@@ -223,7 +223,7 @@ async function hostRoom() {
 						<Button
 							label="Host Room"
 							type="submit"
-							class="h-12 w-32 cursor-pointer rounded-md !bg-[rgb(99,160,177)] !border-black text-black"
+							class="h-12 w-32 cursor-pointer rounded-md !border-black !bg-[rgb(99,160,177)] text-black"
 						/>
 					</form>
 				</div>
