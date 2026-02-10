@@ -43,10 +43,12 @@ export default defineEventHandler(async (event) => {
 	).map((p: ParticipantInfo) => p.name);
 
 	// host name fetching host name
-	const liveKitRoom = (await roomService.listRooms()).filter(
+	const liveKitRoom = (await roomService.listRooms()).find(
 		(r) => r.name === room,
-	)[0];
-	const metadata = liveKitRoom.metadata ? JSON.parse(liveKitRoom.metadata) : {};
+	);
+	const metadata = liveKitRoom?.metadata
+		? JSON.parse(liveKitRoom.metadata)
+		: {};
 
 	return {
 		statusCode: 200,
