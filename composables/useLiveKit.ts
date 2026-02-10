@@ -50,6 +50,18 @@ const streamSetting = {
 	},
 };
 
+const clearLocalStream = (stream: Ref<MediaStream | null>) => {
+	stream.value?.getTracks().forEach((track) => track.stop());
+	stream.value = null;
+};
+
+const isStreamActive = (stream: MediaStream | null): boolean => {
+	if (!stream) return false;
+	return stream
+		.getTracks()
+		.some((track) => track.readyState === "live" && track.enabled);
+};
+
 // Module-level state (shared across all useLiveKit() calls)
 let participantNames: Ref<string[]>;
 let token: Ref<string>;
@@ -239,11 +251,8 @@ export function useLiveKit() {
 
 			if (
 				!isServerSideStreaming.value &&
-				localVideoElement && // Video element shouldn't ever be null but type checking cuz typescript
-				localStream.value && // Only send offer to new user if there is a stream on going
-				localStream.value
-					.getTracks()
-					.some((track) => track.readyState === "live" && track.enabled)
+				localVideoElement &&
+				isStreamActive(localStream.value)
 			) {
 				// if is not server side streaming, have to send SDP offer to new user to they can see the stream
 				await createOffer(participant.identity, localVideoElement);
@@ -368,12 +377,7 @@ export function useLiveKit() {
 		const data = await res.json();
 		await clearPeerConnection();
 
-		if (
-			localStream.value &&
-			localStream.value
-				.getTracks()
-				.some((track) => track.readyState === "live" && track.enabled)
-		) {
+		if (isStreamActive(localStream.value)) {
 			await endStream();
 		} else {
 			for (const p of data.result) {
@@ -424,10 +428,7 @@ export function useLiveKit() {
 
 		localStream.value.getTracks().forEach((track: MediaStreamTrack) => {
 			newPeerConnection.addTrack(track, localStream.value as MediaStream);
-			track.onended = function () {
-				localStream.value?.getTracks().forEach((track) => track.stop());
-				localStream.value = null;
-			};
+			track.onended = () => clearLocalStream(localStream);
 		});
 
 		newPeerConnection.onicecandidate = async (event) => {
@@ -524,10 +525,7 @@ export function useLiveKit() {
 		peerConnection.ontrack = (event) => {
 			event.streams[0].getTracks().forEach((track: MediaStreamTrack) => {
 				localStream.value?.addTrack(track);
-				track.onended = function () {
-					localStream.value?.getTracks().forEach((track) => track.stop());
-					localStream.value = null;
-				};
+				track.onended = () => clearLocalStream(localStream);
 			});
 		};
 
@@ -553,9 +551,7 @@ export function useLiveKit() {
 	};
 
 	const endStream = async () => {
-		localStream.value?.getTracks().forEach((track) => track.stop());
-		localStream.value = null;
-
+		clearLocalStream(localStream);
 		await clearPeerConnection();
 	};
 
