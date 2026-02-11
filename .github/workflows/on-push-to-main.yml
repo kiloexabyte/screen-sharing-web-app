@@ -18,6 +18,8 @@ jobs:
       - name: Run Go script
         env: 
           GOFLAGS: -buildvcs=false
+          ACTIONS_CACHE_URL: ${{ env.ACTIONS_CACHE_URL }}
+          ACTIONS_RUNTIME_TOKEN: ${{ env.ACTIONS_RUNTIME_TOKEN }}
         run: |
           op lint
           op test
