@@ -15,13 +15,13 @@ jobs:
       image: kiloexabyte/runner-image
     steps:
       - uses: actions/checkout@v6
-      - name: Cache node modules
-        uses: actions/cache@v3
+      - name: Cache pnpm store
+        uses: actions/cache@v4
         with:
-          path: repo/node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
+          path: ~/.local/share/pnpm/store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-node-
+            ${{ runner.os }}-pnpm-
 
       - name: Run Go script
         env: 
