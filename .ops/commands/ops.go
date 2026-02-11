@@ -1,3 +1,7 @@
 package commands
 
-type Ops struct{}
+import "github.com/kiloexabyte/common-cicd/cacheactions"
+
+type Ops struct {
+	cacheactions.Ops
+}

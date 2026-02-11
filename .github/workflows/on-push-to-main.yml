@@ -15,14 +15,6 @@ jobs:
       image: kiloexabyte/runner-image
     steps:
       - uses: actions/checkout@v6
-      - name: Cache pnpm store
-        uses: actions/cache@v4
-        with:
-          path: ~/.local/share/pnpm/store
-          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-
-
       - name: Run Go script
         env: 
           GOFLAGS: -buildvcs=false
