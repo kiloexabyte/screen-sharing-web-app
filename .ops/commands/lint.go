@@ -21,12 +21,11 @@ func (Ops) Lint() error {
 		return fmt.Errorf("go fmt: %w", err)
 	}
 
-	sh = command.Shell(sys.Machine(), "npx", "npm", "pnpm")
+	sh = command.Shell(sys.Machine(), "npx", "pnpm")
 	ctx = context.Background()
 
-	npm := useNpmOrPnpm(ctx, sh)
 
-	if err := sh.Exec(ctx, npm, "install"); err != nil {
+	if err := sh.Exec(ctx, "pnpm", "install"); err != nil {
 		return fmt.Errorf("npm install: %w", err)
 	}
 

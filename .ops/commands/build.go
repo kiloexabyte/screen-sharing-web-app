@@ -10,16 +10,15 @@ import (
 
 func (Ops) Build() {
 	ctx := context.Background()
-	sh := command.Shell(sys.Machine(), "npm", "pnpm")
+	sh := command.Shell(sys.Machine(), "pnpm")
 
-	npm := useNpmOrPnpm(ctx, sh)
 
-	err := sh.Exec(ctx, npm, "install")
+	err := sh.Exec(ctx, "pnpm", "install")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	err = sh.Exec(ctx, npm, "run", "build")
+	err = sh.Exec(ctx, "pnpm", "run", "build")
 	if err != nil {
 		log.Fatal(err)
 	}

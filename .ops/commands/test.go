@@ -10,11 +10,9 @@ import (
 
 func (Ops) Test() {
 	ctx := context.Background()
-	sh := command.Shell(sys.Machine(), "npx", "npm", "pnpm")
+	sh := command.Shell(sys.Machine(), "npx", "pnpm")
 
-	npm := useNpmOrPnpm(ctx, sh)
-
-	err := sh.Exec(ctx, npm, "install")
+	err := sh.Exec(ctx, "pnpm", "install")
 	if err != nil {
 		log.Fatal(err)
 	}
