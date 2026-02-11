@@ -1,3 +1,55 @@
+# Dependencies
 node_modules
+
+# Nuxt build outputs
 .nuxt
 .output
+.nitro
+.cache
+.data
+dist
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Git
+.git
+.gitignore
+
+# CI/CD and IDE
+.github
+.idea
+.fleet
+.vscode
+.prettierignore
+.prettierrc*
+.eslintrc*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs
+
+# Infrastructure
+.ops
+**/.terraform/*
+
+# Testing
+tests
+vitest.config.ts
+
+# Documentation
+README.md
+LICENSE
+
+# Docker meta
+Dockerfile
+.dockerignore
+
+# Claude
+.claude
