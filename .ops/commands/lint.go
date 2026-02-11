@@ -25,7 +25,7 @@ func (o Ops) Lint() error {
 	sh = command.Shell(sys.Machine(), "npx", "pnpm")
 	ctx = context.Background()
 
-	if err := o.Restore(pnpmCacheKey(), pnpmCachePaths); err != nil {
+	if err := o.cache.Restore(pnpmCacheKey(), pnpmCachePaths); err != nil {
 		log.Printf("cache restore: %v", err)
 	}
 
@@ -33,7 +33,7 @@ func (o Ops) Lint() error {
 		return fmt.Errorf("pnpm install: %w", err)
 	}
 
-	if err := o.Save(pnpmCacheKey(), pnpmCachePaths); err != nil {
+	if err := o.cache.Save(pnpmCacheKey(), pnpmCachePaths); err != nil {
 		log.Printf("cache save: %v", err)
 	}
 

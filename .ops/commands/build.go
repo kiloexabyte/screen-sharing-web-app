@@ -12,7 +12,7 @@ func (o Ops) Build() {
 	ctx := context.Background()
 	sh := command.Shell(sys.Machine(), "pnpm")
 
-	if err := o.Restore(pnpmCacheKey(), pnpmCachePaths); err != nil {
+	if err := o.cache.Restore(pnpmCacheKey(), pnpmCachePaths); err != nil {
 		log.Printf("cache restore: %v", err)
 	}
 
@@ -21,7 +21,7 @@ func (o Ops) Build() {
 		log.Fatal(err)
 	}
 
-	if err := o.Save(pnpmCacheKey(), pnpmCachePaths); err != nil {
+	if err := o.cache.Save(pnpmCacheKey(), pnpmCachePaths); err != nil {
 		log.Printf("cache save: %v", err)
 	}
 
