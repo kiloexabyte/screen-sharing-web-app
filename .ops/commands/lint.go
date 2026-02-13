@@ -21,14 +21,14 @@ func (Ops) Lint() error {
 		return fmt.Errorf("go fmt: %w", err)
 	}
 
-	sh = command.Shell(sys.Machine(), "npx", "pnpm")
+	sh = command.Shell(sys.Machine(), "bunx", "bun")
 	ctx = context.Background()
 
-	if err := sh.Exec(ctx, "pnpm", "install"); err != nil {
-		return fmt.Errorf("pnpm install: %w", err)
+	if err := sh.Exec(ctx, "bun", "install"); err != nil {
+		return fmt.Errorf("bun install: %w", err)
 	}
 
-	if err := sh.Exec(ctx, "npx", "prettier", "--check", "./**/*.{js,jsx,mjs,cjs,ts,tsx,json,vue}"); err != nil {
+	if err := sh.Exec(ctx, "bunx", "prettier", "--check", "./**/*.{js,jsx,mjs,cjs,ts,tsx,json,vue}"); err != nil {
 		return fmt.Errorf("prettier: %w", err)
 	}
 

@@ -1,54 +1,54 @@
 {
-  "name": "nuxt-app",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "build": "nuxt build",
-    "dev": "nuxt dev",
-    "generate": "nuxt generate",
-    "preview": "nuxt preview",
-    "postinstall": "nuxt prepare",
-    "pretty": "prettier --write \"./**/*.{js,jsx,mjs,cjs,ts,tsx,json,vue}\"",
-    "prettyCheck": "bunx prettier --check \"./**/*.{js,jsx,mjs,cjs,ts,tsx,json,vue}\"",
-    "unit-test": "bunx vitest run tests/units",
-    "integration-test": "bunx vitest run tests/integrations"
-  },
-  "dependencies": {
-    "@primeuix/themes": "^1.1.2",
-    "@primevue/forms": "^4.3.5",
-    "livekit-client": "^2.5.7",
-    "livekit-server-sdk": "^2.7.0",
-    "moment": "^2.30.1",
-    "nuxt": "^3.11.1",
-    "primevue": "^4.3.5",
-    "vue": "^3.4.21",
-    "vue-router": "^4.3.0"
-  },
-  "devDependencies": {
-    "@nuxt/test-utils": "^3.14.3",
-    "@primevue/nuxt-module": "^4.3.5",
-    "@types/node": "^22.8.1",
-    "@vue/test-utils": "^2.4.6",
-    "autoprefixer": "^10.4.19",
-    "happy-dom": "^15.7.4",
-    "postcss": "^8.4.38",
-    "prettier": "^3.2.5",
-    "prettier-plugin-tailwindcss": "^0.5.13",
-    "tailwindcss": "^3.4.3",
-    "vitest": "^3.2.0"
-  },
-  "prettier": {
-    "semi": true,
-    "singleQuote": false,
-    "useTabs": true,
-    "trailingComma": "all",
-    "bracketSpacing": true,
-    "arrowParens": "always",
-    "plugins": [
-      "prettier-plugin-tailwindcss"
-    ]
-  },
-  "trustedDependencies": [
-    "@parcel/watcher"
-  ]
+	"name": "nuxt-app",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"build": "nuxt build",
+		"dev": "nuxt dev",
+		"generate": "nuxt generate",
+		"preview": "nuxt preview",
+		"postinstall": "nuxt prepare",
+		"pretty": "prettier --write \"./**/*.{js,jsx,mjs,cjs,ts,tsx,json,vue}\"",
+		"prettyCheck": "bunx prettier --check \"./**/*.{js,jsx,mjs,cjs,ts,tsx,json,vue}\"",
+		"unit-test": "bunx vitest run tests/units",
+		"integration-test": "bunx vitest run tests/integrations"
+	},
+	"dependencies": {
+		"@primeuix/themes": "^1.1.2",
+		"@primevue/forms": "^4.3.5",
+		"livekit-client": "^2.5.7",
+		"livekit-server-sdk": "^2.7.0",
+		"moment": "^2.30.1",
+		"nuxt": "^3.11.1",
+		"primevue": "^4.3.5",
+		"vue": "^3.4.21",
+		"vue-router": "^4.3.0"
+	},
+	"devDependencies": {
+		"@nuxt/test-utils": "^3.14.3",
+		"@primevue/nuxt-module": "^4.3.5",
+		"@types/node": "^22.8.1",
+		"@vue/test-utils": "^2.4.6",
+		"autoprefixer": "^10.4.19",
+		"happy-dom": "^15.7.4",
+		"postcss": "^8.4.38",
+		"prettier": "^3.2.5",
+		"prettier-plugin-tailwindcss": "^0.5.13",
+		"tailwindcss": "^3.4.3",
+		"vitest": "^3.2.0"
+	},
+	"prettier": {
+		"semi": true,
+		"singleQuote": false,
+		"useTabs": true,
+		"trailingComma": "all",
+		"bracketSpacing": true,
+		"arrowParens": "always",
+		"plugins": [
+			"prettier-plugin-tailwindcss"
+		]
+	},
+	"trustedDependencies": [
+		"@parcel/watcher"
+	]
 }
