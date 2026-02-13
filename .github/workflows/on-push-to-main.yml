@@ -14,18 +14,17 @@ jobs:
     container: 
       image: kiloexabyte/runner-image
     steps:
-      - name: Expose cache vars
-        uses: actions/github-script@v7
-        with:
-          script: |
-            core.exportVariable('ACTIONS_CACHE_URL', process.env['ACTIONS_CACHE_URL']);
-            core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env['ACTIONS_RUNTIME_TOKEN']);
       - uses: actions/checkout@v6
+      - name: Cache node modules
+        uses: actions/cache@v4
+        with:
+          path: ./node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
       - name: Run Go script
         env: 
           GOFLAGS: -buildvcs=false
-          ACTIONS_CACHE_URL: ${{ env.ACTIONS_CACHE_URL }}
-          ACTIONS_RUNTIME_TOKEN: ${{ env.ACTIONS_RUNTIME_TOKEN }}
         run: |
           op lint
           op test

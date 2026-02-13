@@ -5,7 +5,6 @@ go 1.24.7
 toolchain go1.24.13
 
 require (
-	github.com/kiloexabyte/common-cicd v0.0.0-20260211041059-3d16873e377d
 	lesiw.io/command v0.0.0-20260126021408-77eb589ec7af
 	lesiw.io/fs v0.5.0
 	lesiw.io/ops v0.13.0
