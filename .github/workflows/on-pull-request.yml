@@ -1,0 +1,31 @@
+name: On Pull Request
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths-ignore:
+      - "**.md"
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: kiloexabyte/runner-image
+    steps:
+      - uses: actions/checkout@v6
+      - name: Cache node modules
+        uses: actions/cache@v4
+        with:
+          path: ./node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: Run Go script
+        env:
+          GOFLAGS: -buildvcs=false
+        run: |
+          op lint
+          op test
+          op build
