@@ -28,7 +28,9 @@ func (Ops) Lint() error {
 		return fmt.Errorf("pnpm install: %w", err)
 	}
 
-	if err := sh.Exec(ctx, "npx", "prettier", "--check", "./**/*.{js,jsx,mjs,cjs,ts,tsx,json,vue}"); err != nil {
+	glob := "./**/*.{js,jsx,mjs,cjs,ts,tsx,json,vue}"
+	err := sh.Exec(ctx, "npx", "prettier", "--check", glob)
+	if err != nil {
 		return fmt.Errorf("prettier: %w", err)
 	}
 

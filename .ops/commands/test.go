@@ -20,7 +20,8 @@ func (Ops) Test() {
 		log.Fatal(err)
 	}
 
-	if err := sh.Exec(ctx, "npx", "vitest", "run", "tests/integrations"); err != nil {
+	err := sh.Exec(ctx, "npx", "vitest", "run", "tests/integrations")
+	if err != nil {
 		log.Fatal(err)
 	}
 }
