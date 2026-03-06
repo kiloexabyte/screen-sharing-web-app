@@ -25,9 +25,9 @@ const sendOnEnter = (event: KeyboardEvent) => {
 	<div class="messaging-text-area flex w-full flex-col items-end">
 		<Textarea
 			id="chat-message-input"
+			v-model="message"
 			class="w-full"
 			autofocus
-			v-model="message"
 			rows="2"
 			cols="17"
 			@keydown.enter.prevent="send"

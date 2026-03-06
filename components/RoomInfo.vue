@@ -14,13 +14,9 @@ type ToggleStreamFunction = () => void;
 type LeaveRoomFunction = () => void;
 type ToggleChatFunction = () => void;
 
-let toggleStream: ToggleStreamFunction | undefined;
-let leaveRoom: LeaveRoomFunction | undefined;
-let toggleChat: ToggleChatFunction | undefined;
-
-leaveRoom = inject<LeaveRoomFunction>("leaveRoom");
-toggleChat = inject<ToggleChatFunction>("ToggleChat");
-toggleStream = inject<ToggleStreamFunction>("handleToggleStream");
+const toggleStream = inject<ToggleStreamFunction>("handleToggleStream");
+const leaveRoom = inject<LeaveRoomFunction>("leaveRoom");
+const toggleChat = inject<ToggleChatFunction>("ToggleChat");
 </script>
 
 <template>
@@ -44,11 +40,11 @@ toggleStream = inject<ToggleStreamFunction>("handleToggleStream");
 		<div class="flex flex-row items-center gap-5 pr-3">
 			<div v-if="usingSFU && isHost === 'true'">Server-side streaming</div>
 			<div v-if="!usingSFU && isHost === 'true'">P2p streaming</div>
-			<Button @click="toggleChat" severity="info" outlined> Hide Chat</Button>
-			<Button v-if="isHost === 'true'" @click="toggleStream" outlined
+			<Button severity="info" outlined @click="toggleChat"> Hide Chat</Button>
+			<Button v-if="isHost === 'true'" outlined @click="toggleStream"
 				>Stream</Button
 			>
-			<Button @click="leaveRoom" severity="danger" outlined>Leave Room</Button>
+			<Button severity="danger" outlined @click="leaveRoom">Leave Room</Button>
 		</div>
 	</div>
 </template>

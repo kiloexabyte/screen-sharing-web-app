@@ -10,7 +10,7 @@ defineProps<{
 			<h2>Users:</h2>
 		</div>
 		<ul class="flex gap-2">
-			<li v-for="user in users" class="rounded bg-[#82d2e8] p-2">
+			<li v-for="user in users" :key="user" class="rounded bg-[#82d2e8] p-2">
 				<span class="text-black">
 					{{ user }}
 				</span>

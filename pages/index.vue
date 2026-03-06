@@ -130,19 +130,19 @@ async function hostRoom() {
 				>
 					<form
 						v-focustrap
-						@submit.prevent="joinRoom"
 						class="flex w-3/6 flex-col items-center gap-8 text-white"
+						@submit.prevent="joinRoom"
 					>
 						<div class="flex flex-col gap-2">
 							<div class="w-full">
 								<label for="username">Username</label>
 								<InputText
-									autofocus
-									class="w-full"
 									id="joinroom-username"
 									v-model="username"
-									@focus="setUsernameTouched"
+									autofocus
+									class="w-full"
 									aria-describedby="username-help"
+									@focus="setUsernameTouched"
 								/>
 								<!-- Validation message for username -->
 								<p v-if="showUsernameValidation" class="text-sm text-red-500">
@@ -152,11 +152,11 @@ async function hostRoom() {
 							<div class="w-full">
 								<label for="room">Room</label>
 								<InputText
-									class="w-full"
 									id="joinroom-room"
 									v-model="room"
-									@focus="setRoomTouched"
+									class="w-full"
 									aria-describedby="room-help"
+									@focus="setRoomTouched"
 								/>
 								<!-- Validation message for room -->
 								<p v-if="showRoomValidation" class="text-sm text-red-500">
@@ -180,25 +180,25 @@ async function hostRoom() {
 				>
 					<form
 						v-focustrap
-						@submit.prevent="hostRoom"
 						class="flex w-3/6 flex-col items-center gap-4 text-white"
+						@submit.prevent="hostRoom"
 					>
 						<div class="flex items-center justify-end gap-2">
 							<div>
 								Server Side Streaming
-								<input type="checkbox" v-model="serverSideStreaming" />
+								<input v-model="serverSideStreaming" type="checkbox" />
 							</div>
 						</div>
 						<div class="flex flex-col gap-2">
 							<div class="w-full">
 								<label for="username">Username</label>
 								<InputText
-									autofocus
-									class="w-full"
 									id="hostroom-username"
 									v-model="username"
-									@focus="setUsernameTouched"
+									autofocus
+									class="w-full"
 									aria-describedby="username-help"
+									@focus="setUsernameTouched"
 								/>
 								<!-- Validation message for username -->
 								<p v-if="showUsernameValidation" class="text-sm text-red-500">
@@ -208,11 +208,11 @@ async function hostRoom() {
 							<div class="w-full">
 								<label for="room">Room</label>
 								<InputText
-									class="w-full"
 									id="hostroom-room"
 									v-model="room"
-									@focus="setRoomTouched"
+									class="w-full"
 									aria-describedby="room-help"
+									@focus="setRoomTouched"
 								/>
 								<!-- Validation message for room -->
 								<p v-if="showRoomValidation" class="text-sm text-red-500">
