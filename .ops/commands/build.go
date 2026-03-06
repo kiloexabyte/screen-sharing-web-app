@@ -10,13 +10,13 @@ import (
 
 func (Ops) Build() {
 	ctx := context.Background()
-	sh := command.Shell(sys.Machine(), "pnpm")
+	sh := command.Shell(sys.Machine(), "bun")
 
-	if err := sh.Exec(ctx, "pnpm", "install"); err != nil {
+	if err := sh.Exec(ctx, "bun", "install"); err != nil {
 		log.Fatal(err)
 	}
 
-	if err := sh.Exec(ctx, "pnpm", "run", "build"); err != nil {
+	if err := sh.Exec(ctx, "bun", "run", "build"); err != nil {
 		log.Fatal(err)
 	}
 }

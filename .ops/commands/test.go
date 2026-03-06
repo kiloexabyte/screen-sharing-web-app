@@ -10,17 +10,18 @@ import (
 
 func (Ops) Test() {
 	ctx := context.Background()
-	sh := command.Shell(sys.Machine(), "npx", "pnpm")
+	sh := command.Shell(sys.Machine(), "bunx", "bun")
 
-	if err := sh.Exec(ctx, "pnpm", "install"); err != nil {
+	if err := sh.Exec(ctx, "bun", "install"); err != nil {
 		log.Fatal(err)
 	}
 
-	if err := sh.Exec(ctx, "npx", "vitest", "run", "tests/units"); err != nil {
+	err := sh.Exec(ctx, "bunx", "vitest", "run", "tests/units")
+	if err != nil {
 		log.Fatal(err)
 	}
 
-	err := sh.Exec(ctx, "npx", "vitest", "run", "tests/integrations")
+	err = sh.Exec(ctx, "bunx", "vitest", "run", "tests/integrations")
 	if err != nil {
 		log.Fatal(err)
 	}
