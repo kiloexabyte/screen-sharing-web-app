@@ -39,20 +39,19 @@ describe("useLiveKit", () => {
 		expect(token.value).toBe(mockData.token); // Enforce token is set
 	});
 
-	it("fetchToken throws error if username is taken", async () => {
+	it("fetchToken returns error if username is taken", async () => {
 		vi.spyOn(signalingServer, "GenerateTokenForJoinRoom").mockResolvedValue({
 			ok: true,
 			json: async () => ({ token: "", statusCode: 409 }),
 		} as Response);
 
 		const { fetchToken } = useLiveKit();
+		const result = await fetchToken("room1", "takenUser", false);
 
-		await expect(fetchToken("room1", "takenUser", false)).rejects.toThrow(
-			"Username is Taken",
-		);
+		expect(result).toEqual({ error: "Username is Taken" });
 	});
 
-	it("fetchToken throws error on failed response", async () => {
+	it("fetchToken returns error on failed response", async () => {
 		vi.spyOn(signalingServer, "GenerateTokenForHostRoom").mockResolvedValue({
 			ok: false,
 			status: 500,
@@ -60,9 +59,10 @@ describe("useLiveKit", () => {
 		} as Response);
 
 		const { fetchToken } = useLiveKit();
+		const result = await fetchToken("room1", "hostUser", true);
 
-		await expect(fetchToken("room1", "hostUser", true)).rejects.toThrow(
-			"Error fetching token: HTTP request status 500",
-		);
+		expect(result).toEqual({
+			error: "Error fetching token: HTTP request status 500",
+		});
 	});
 });

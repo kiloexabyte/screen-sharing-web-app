@@ -8,8 +8,8 @@ import {
 export default defineEventHandler(async (event) => {
 	const query = getQuery(event);
 
-	const room: string = query.room?.toString() ?? "";
-	const username: string = query.username?.toString() ?? "";
+	const room: string = query.room?.toString() || "";
+	const username: string = query.username?.toString() || "";
 
 	if (!room || !username) {
 		return {

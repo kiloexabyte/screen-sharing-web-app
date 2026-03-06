@@ -9,8 +9,8 @@ import {
 export default defineEventHandler(async (event) => {
 	const query = getQuery(event);
 
-	const room: string = query.room?.toString() ?? "";
-	const username: string = query.username?.toString() ?? "";
+	const room: string = query.room?.toString() || "";
+	const username: string = query.username?.toString() || "";
 
 	if (!room || !username) {
 		return {
@@ -46,9 +46,10 @@ export default defineEventHandler(async (event) => {
 	const liveKitRoom = (await roomService.listRooms()).find(
 		(r) => r.name === room,
 	);
-	const metadata = liveKitRoom?.metadata
-		? JSON.parse(liveKitRoom.metadata)
-		: {};
+	let metadata = {};
+	if (liveKitRoom?.metadata) {
+		metadata = JSON.parse(liveKitRoom.metadata);
+	}
 
 	return {
 		statusCode: 200,

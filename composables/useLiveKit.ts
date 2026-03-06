@@ -97,36 +97,31 @@ export function useLiveKit() {
 	) => {
 		if (isHost) {
 			const response = await GenerateTokenForHostRoom(username, roomName);
-			if (response.ok) {
-				const data = await response.json();
-				token.value = data.token;
+			if (!response.ok) {
 				return {
-					token: data.token,
+					error: `Error fetching token: HTTP request status ${response.status}`,
 				};
-			} else {
-				throw new Error(
-					`Error fetching token: HTTP request status ${response.status}`,
-				);
 			}
-		} else {
-			const response = await GenerateTokenForJoinRoom(username, roomName);
-			if (response.ok) {
-				const data = await response.json();
-				token.value = data.token;
-				if (data.statusCode === 409) {
-					throw new Error("Username is Taken");
-				}
-				return {
-					host: data.host,
-					token: data.token,
-					participantNames: data.participantNames,
-				};
-			} else {
-				throw new Error(
-					`Error fetching token: HTTP request status ${response.status}`,
-				);
-			}
+			const data = await response.json();
+			token.value = data.token;
+			return { token: data.token };
 		}
+		const response = await GenerateTokenForJoinRoom(username, roomName);
+		if (!response.ok) {
+			return {
+				error: `Error fetching token: HTTP request status ${response.status}`,
+			};
+		}
+		const data = await response.json();
+		token.value = data.token;
+		if (data.statusCode === 409) {
+			return { error: "Username is Taken" };
+		}
+		return {
+			host: data.host,
+			token: data.token,
+			participantNames: data.participantNames,
+		};
 	};
 
 	const joinRoom = async (
@@ -158,14 +153,14 @@ export function useLiveKit() {
 				case "offer":
 					if (remoteVideoElement) {
 						await createAnswer(
-							participant?.identity ?? "",
+							participant?.identity || "",
 							message.offer,
 							remoteVideoElement,
 						);
 					}
 					break;
 				case "candidate": {
-					const pc = peerConnections.value.get(participant?.identity ?? "");
+					const pc = peerConnections.value.get(participant?.identity || "");
 					if (pc) {
 						pc.addIceCandidate(new RTCIceCandidate(message.candidate));
 					}
@@ -175,13 +170,16 @@ export function useLiveKit() {
 		};
 
 		if (!roomName || !username) {
-			throw new Error("missing input");
+			return { error: "missing input" };
 		}
 
 		currentRoom.value?.disconnect();
 		currentUsername.value = username;
 
 		const fetchedToken = await fetchToken(roomName, username, false);
+		if ("error" in fetchedToken) {
+			return { error: fetchedToken.error };
+		}
 		currentRoom.value = new Room();
 
 		// room events for p2p streaming
@@ -200,10 +198,10 @@ export function useLiveKit() {
 
 		await currentRoom.value.connect(wsUrl, token.value);
 
-		participantNames.value = fetchedToken?.participantNames;
+		participantNames.value = fetchedToken.participantNames;
 
 		return {
-			host: fetchedToken?.host,
+			host: fetchedToken.host,
 		};
 	};
 
@@ -231,10 +229,10 @@ export function useLiveKit() {
 
 			switch (message.type) {
 				case "answer":
-					await addAnswer(participant?.identity ?? "", message.answer);
+					await addAnswer(participant?.identity || "", message.answer);
 					break;
 				case "candidate": {
-					const pc = peerConnections.value.get(participant?.identity ?? "");
+					const pc = peerConnections.value.get(participant?.identity || "");
 					if (pc) {
 						pc.addIceCandidate(new RTCIceCandidate(message.candidate));
 					}
@@ -263,7 +261,10 @@ export function useLiveKit() {
 
 		currentRoom.value?.disconnect();
 
-		await fetchToken(roomName, username, true);
+		const fetchedToken = await fetchToken(roomName, username, true);
+		if ("error" in fetchedToken) {
+			return { error: fetchedToken.error };
+		}
 		currentUsername.value = username;
 
 		const options: RoomOptions = {
@@ -329,7 +330,7 @@ export function useLiveKit() {
 		participant?: RemoteParticipant | LocalParticipant | undefined,
 	) => {
 		const mappedMsg: ChatMessage = {
-			username: participant?.name ?? "",
+			username: participant?.name || "",
 			text: message.message,
 			time: moment().format("LT"),
 		};
@@ -369,10 +370,10 @@ export function useLiveKit() {
 
 	const toggleScreenshareP2P = async (videoElement: HTMLMediaElement) => {
 		const res = await GetUsersInRoom(
-			currentRoom.value?.name.toString().trim() ?? "",
+			currentRoom.value?.name.toString().trim() || "",
 		);
 		if (!res.ok) {
-			throw new Error("error fetching users in lobby");
+			return;
 		}
 		const data = await res.json();
 		await clearPeerConnection();

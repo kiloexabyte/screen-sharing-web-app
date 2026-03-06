@@ -59,29 +59,9 @@ const toggleFullScreen = (): void => {
 	if (!localVideo.value) return;
 
 	if (document.fullscreenElement) {
-		if (document.exitFullscreen) {
-			document.exitFullscreen();
-		} else if ((document as any).mozCancelFullScreen) {
-			/* Firefox */
-			(document as any).mozCancelFullScreen();
-		} else if ((document as any).webkitExitFullscreen) {
-			/* Chrome, Safari and Opera */
-			(document as any).webkitExitFullscreen();
-		} else if ((document as any).msExitFullscreen) {
-			/* IE/Edge */
-			(document as any).msExitFullscreen();
-		}
-	} else if (localVideo.value.requestFullscreen) {
+		document.exitFullscreen();
+	} else {
 		localVideo.value.requestFullscreen();
-	} else if ((localVideo.value as any).mozRequestFullScreen) {
-		/* Firefox */
-		(localVideo.value as any).mozRequestFullScreen();
-	} else if ((localVideo.value as any).webkitRequestFullscreen) {
-		/* Chrome, Safari & Opera */
-		(localVideo.value as any).webkitRequestFullscreen();
-	} else if ((localVideo.value as any).msRequestFullscreen) {
-		/* IE/Edge */
-		(localVideo.value as any).msRequestFullscreen();
 	}
 };
 
@@ -130,43 +110,48 @@ onMounted(async () => {
 
 	const data = await res.json();
 
-	try {
-		if (isHost === "true") {
-			// hosting room
-			if (data.roomExist) {
-				dialogVisible.value = true;
-				failureMessage.value = "Room already exist";
-				return;
-			}
-			await hostRoom(
-				room.toString() ?? "",
-				username.toString() ?? "",
-				serverSideStreamingEnabled.value,
+	if (isHost === "true") {
+		// hosting room
+		if (data.roomExist) {
+			dialogVisible.value = true;
+			failureMessage.value = "Room already exist";
+			return;
+		}
+		const hostResult = await hostRoom(
+			room.toString(),
+			username.toString(),
+			serverSideStreamingEnabled.value,
+			localVideo.value,
+		);
+		if (hostResult?.error) {
+			dialogVisible.value = true;
+			failureMessage.value = hostResult.error;
+			return;
+		}
+		currentHost.value = username;
+		currentRoom.value = room;
+	} else {
+		// joining existing room
+		if (!data.roomExist) {
+			dialogVisible.value = true;
+			failureMessage.value = "Room does not exist";
+			return;
+		}
+
+		if (localVideo.value) {
+			const joinResult = await joinRoom(
+				room.toString(),
+				username.toString(),
 				localVideo.value,
 			);
-			currentHost.value = username;
-			currentRoom.value = room;
-		} else {
-			// joining existing room
-			if (!data.roomExist) {
+			if (joinResult.error) {
 				dialogVisible.value = true;
-				failureMessage.value = "Room does not exist";
+				failureMessage.value = joinResult.error;
 				return;
 			}
-
-			if (localVideo.value) {
-				const { host } = await joinRoom(
-					room.toString() ?? "",
-					username.toString() ?? "",
-					localVideo.value,
-				);
-				currentHost.value = host;
-				currentRoom.value = room;
-			}
+			currentHost.value = joinResult.host;
+			currentRoom.value = room;
 		}
-	} catch (err: any) {
-		dialogVisible.value = true;
-		failureMessage.value = err.toString();
 	}
 
 	globalThis.addEventListener("keydown", adjustVolume);
@@ -196,9 +181,9 @@ provide("leaveRoom", leave);
 	<div class="h-screen bg-black">
 		<div class="flex h-[90%]">
 			<video
+				ref="localVideo"
 				autoPlay
 				playsInline
-				ref="localVideo"
 				:class="chatIsOpen ? 'w-5/6' : 'w-full'"
 				:muted="isHost === 'true'"
 			/>
@@ -211,12 +196,12 @@ provide("leaveRoom", leave);
 
 		<div class="h-[10%]">
 			<RoomInfo
-				:roomName="currentRoom"
+				:room-name="currentRoom"
 				:usernames="participantNames"
 				:username="username ?? ''"
 				:host="currentHost"
-				:isHost="isHost ?? ''"
-				:usingSFU="serverSideStreamingEnabled"
+				:is-host="isHost ?? ''"
+				:using-s-f-u="serverSideStreamingEnabled"
 			/>
 		</div>
 	</div>
